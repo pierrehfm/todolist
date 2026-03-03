@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - MONGODB_URI=mongodb://db:27017/todolist
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  db:
+    image: mongo:6
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - app-network
+      
+  mongo-express:
+    image: mongo-express
+    ports:
+      - "8081:8081"
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=db
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+volumes:
+  mongo-data:
+
+networks:
+  app-network:
+    driver: bridge

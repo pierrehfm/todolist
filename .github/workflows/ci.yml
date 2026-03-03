@@ -1,0 +1,52 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: npm ci
+      - name: Run ESLint
+        run: npm run lint
+
+  test:
+    runs-on: ubuntu-latest
+    needs: lint
+    services:
+      mongodb:
+        image: mongo:6
+        ports:
+          - 27017:27017
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: npm ci
+      - name: Run tests
+        env:
+          MONGODB_URI_TEST: mongodb://localhost:27017/todolist_jest_test
+        run: npm test
+
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Build Docker image
+        run: docker compose build
