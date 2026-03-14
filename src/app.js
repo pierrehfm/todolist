@@ -10,6 +10,5 @@ app.get('/health', (req, res) => {
 });
 
 app.use('/todos', todoRoutes);
-// app.use('/ressources', todoRoutes);
 
 module.exports = app;
