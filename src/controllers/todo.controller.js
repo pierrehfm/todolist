@@ -27,6 +27,9 @@ exports.getAllTodos = async (req, res) => {
         if (req.query.completed !== undefined) {
             query.completed = req.query.completed === 'true';
         }
+        if (req.query.search) {
+            query.title = { $regex: req.query.search, $options: 'i' };
+        }
 
         let sort = { createdAt: -1 };
         if (req.query.sortBy) {
@@ -34,8 +37,21 @@ exports.getAllTodos = async (req, res) => {
             sort = { [req.query.sortBy]: order };
         }
 
-        const todos = await Todo.find(query).sort(sort).skip(skip).limit(limit);
-        res.status(200).json(todos);
+        const total = await Todo.countDocuments(query);
+        const todos = await Todo.find(query)
+            .sort(sort)
+            .skip(skip)
+            .limit(limit);
+
+        res.status(200).json({
+            data: todos,
+            pagination: {
+                total,
+                page,
+                limit,
+                totalPages: Math.ceil(total / limit)
+            }
+        });
     } catch (error) {
         res.status(500).json({ message: 'Erreur serveur', error: error.message });
     }
