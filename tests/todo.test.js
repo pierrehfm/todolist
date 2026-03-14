@@ -56,7 +56,9 @@ describe('Todo API', () => {
 
             const res = await request(app).get('/todos');
             expect(res.statusCode).toBe(200);
-            expect(res.body.length).toBe(2);
+            expect(res.body.data.length).toBe(2);
+            expect(res.body).toHaveProperty('pagination');
+            expect(res.body.pagination.total).toBe(2);
         });
     });
 
