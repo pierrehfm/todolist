@@ -1,6 +1,6 @@
 # TodoList API REST
 
-Ce projet est une API REST complète gérant une Todo List (ou `ressources` de manière générique), incluant le CRUD, la validation, une base de données MongoDB, et une containerisation avec Docker. 
+Ce projet est une API REST complète gérant une Todo List, incluant le CRUD, la validation, une base de données MongoDB, et une containerisation avec Docker. 
 
 ## Prérequis
 - Docker et Docker Compose
@@ -28,11 +28,11 @@ Mongo Express (Interface d'admin BDD) sur : `http://localhost:8081`
 ## Routes API
 
 - `GET /health` : Health check de l'API
-- `GET /todos` (ou `/ressources`) : Listes les Todos avec pagination
-- `GET /todos/:id` (ou `/ressources/:id`) : Récupère une todo par son ID
-- `POST /todos` (ou `/ressources`) : Crée une nouvelle Todo
-- `PUT /todos/:id` (ou `/ressources/:id`) : Met à jour une todo
-- `DELETE /todos/:id` (ou `/ressources/:id`) : Supprime une todo
+- `GET /todos` : Listes les Todos avec pagination
+- `GET /todos/:id` : Récupère une todo par son ID
+- `POST /todos` : Crée une nouvelle Todo
+- `PUT /todos/:id` : Met à jour une todo
+- `DELETE /todos/:id` : Supprime une todo
 
 ## Tests
 
